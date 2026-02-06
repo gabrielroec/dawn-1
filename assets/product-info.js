@@ -26,6 +26,7 @@ if (!customElements.get('product-info')) {
         );
 
         this.initQuantityHandlers();
+        this.initBundlePricingHandlers();
         this.dispatchEvent(new CustomEvent('product-info:loaded', { bubbles: true }));
       }
 
@@ -43,6 +44,13 @@ if (!customElements.get('product-info')) {
         if (!this.dataset.originalSection) {
           this.cartUpdateUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, this.fetchQuantityRules.bind(this));
         }
+      }
+
+      initBundlePricingHandlers() {
+        if (!this.quantityInput) return;
+        this.updateBundlePricingTotals();
+        this.quantityInput.addEventListener('input', () => this.updateBundlePricingTotals());
+        this.quantityInput.addEventListener('change', () => this.updateBundlePricingTotals());
       }
 
       disconnectedCallback() {
@@ -191,8 +199,11 @@ if (!customElements.get('product-info')) {
           updateSourceFromDestination('Inventory', ({ innerText }) => innerText === '');
           updateSourceFromDestination('Volume');
           updateSourceFromDestination('Price-Per-Item', ({ classList }) => classList.contains('hidden'));
+          updateSourceFromDestination('Bundle-Pricing', ({ classList }) => classList.contains('hidden'));
 
           this.updateQuantityRules(this.sectionId, html);
+          this.syncBundlePricingData(html);
+          this.updateBundlePricingTotals();
           this.querySelector(`#Quantity-Rules-${this.dataset.section}`)?.classList.remove('hidden');
           this.querySelector(`#Volume-Note-${this.dataset.section}`)?.classList.remove('hidden');
 
@@ -209,6 +220,55 @@ if (!customElements.get('product-info')) {
             },
           });
         };
+      }
+
+      syncBundlePricingData(html) {
+        const source = html.getElementById(`Bundle-Pricing-${this.sectionId}`);
+        const destination = this.querySelector(`#Bundle-Pricing-${this.dataset.section}`);
+        if (!source || !destination) return;
+
+        destination.dataset.price = source.dataset.price || '0';
+        destination.dataset.compare = source.dataset.compare || '0';
+        destination.dataset.sticks = source.dataset.sticks || '0';
+        destination.dataset.currency = source.dataset.currency || '';
+        destination.dataset.locale = source.dataset.locale || '';
+      }
+
+      updateBundlePricingTotals() {
+        const container = this.querySelector(`#Bundle-Pricing-${this.dataset.section}`);
+        if (!container) return;
+
+        const qty = parseInt(this.quantityInput?.value || '1', 10);
+        const basePrice = parseInt(container.dataset.price || '0', 10);
+        const baseCompare = parseInt(container.dataset.compare || '0', 10);
+        const sticksCount = parseInt(container.dataset.sticks || '0', 10);
+        const currency = container.dataset.currency;
+        const locale = container.dataset.locale || document.documentElement.lang || 'en';
+
+        if (!basePrice || !sticksCount) return;
+
+        const formatMoney = (cents) => {
+          if (!currency) return `${cents / 100}`;
+          return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(cents / 100);
+        };
+
+        const totalPrice = basePrice * qty;
+        const totalCompare = baseCompare ? baseCompare * qty : 0;
+        const perStick = Math.round(basePrice / sticksCount);
+
+        const compareEl = container.querySelector('[data-bundle-compare] .bundle-pricing__value');
+        const priceEl = container.querySelector('[data-bundle-price] .bundle-pricing__value');
+        const perStickEl = container.querySelector('[data-bundle-per-stick] .bundle-pricing__value');
+        const compareWrapper = container.querySelector('[data-bundle-compare]');
+
+        if (priceEl) priceEl.textContent = formatMoney(totalPrice);
+        if (perStickEl) perStickEl.textContent = formatMoney(perStick);
+
+        if (compareWrapper) {
+          const hasCompare = baseCompare > basePrice;
+          compareWrapper.classList.toggle('hidden', !hasCompare);
+          if (hasCompare && compareEl) compareEl.textContent = formatMoney(totalCompare);
+        }
       }
 
       updateVariantInputs(variantId) {

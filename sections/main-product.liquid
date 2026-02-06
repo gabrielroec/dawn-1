@@ -297,6 +297,60 @@
                       </button>
                     </quantity-input>
                     {%- liquid
+                      assign variant_for_bundle = product.selected_or_first_available_variant
+                      assign sticks_per_pack = product.metafields.custom.sticks_per_pack.value
+                      assign packs_count = 0
+                      assign sticks_count = 0
+                      assign price_per_stick = nil
+
+                      if variant_for_bundle and sticks_per_pack
+                        assign packs_text = variant_for_bundle.title | split: ' ' | first
+                        assign packs_count = packs_text | plus: 0
+                        if packs_count > 0
+                          assign sticks_count = packs_count | times: sticks_per_pack
+                        endif
+                      endif
+
+                      if sticks_count > 0
+                        assign price_per_stick = variant_for_bundle.price | divided_by: sticks_count
+                      endif
+                    -%}
+                    <div
+                      id="Bundle-Pricing-{{ section.id }}"
+                      class="bundle-pricing{% if price_per_stick == nil %} hidden{% endif %}"
+                      aria-live="polite"
+                      data-price="{{ variant_for_bundle.price | default: 0 }}"
+                      data-compare="{{ variant_for_bundle.compare_at_price | default: 0 }}"
+                      data-sticks="{{ sticks_count | default: 0 }}"
+                      data-currency="{{ cart.currency.iso_code }}"
+                      data-locale="{{ request.locale.iso_code }}"
+                    >
+                      {%- if price_per_stick -%}
+                        <span
+                          class="bundle-pricing__compare{% if variant_for_bundle.compare_at_price == blank or variant_for_bundle.compare_at_price <= variant_for_bundle.price %} hidden{% endif %}"
+                          data-bundle-compare
+                        >
+                          <span class="visually-hidden"></span>
+                          <span class="bundle-pricing__value">
+                            {{ variant_for_bundle.compare_at_price | money }}
+                          </span>
+                        </span>
+                        <span class="bundle-pricing__price" data-bundle-price>
+                          <span class="visually-hidden"></span>
+                          <span class="bundle-pricing__value">
+                            {{ variant_for_bundle.price | money }}
+                          </span>
+                        </span>
+                        <span class="bundle-pricing__per-stick" data-bundle-per-stick>
+                          
+                          <span class="bundle-pricing__value">
+                            {{ price_per_stick | money }}
+                          </span>
+                           PER STICK
+                        </span>
+                      {%- endif -%}
+                    </div>
+                    {%- liquid
                       assign volume_pricing_array = product.selected_or_first_available_variant.quantity_price_breaks | sort: 'quantity' | reverse
                       assign current_qty_for_volume_pricing = cart_qty | plus: product.selected_or_first_available_variant.quantity_rule.min
                       if cart_qty > 0

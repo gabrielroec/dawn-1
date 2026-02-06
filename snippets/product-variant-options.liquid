@@ -70,7 +70,7 @@
 
       if packs_count > 0
         assign sticks_count = packs_count | times: sticks_per_pack
-        assign sticks_label = ' (<span class="variant-sticks-count">' | append: sticks_count | append: ' sticks</span>)'
+        assign sticks_label = ' <span class="variant-sticks-count">(' | append: sticks_count | append: ' sticks)</span>'
       endif
     endif
   -%}
