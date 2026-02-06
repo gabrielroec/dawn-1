@@ -191,6 +191,7 @@ product-info {
   margin-bottom: 1rem;
   background-color: #435219;
   gap: 8px;
+  padding: 20px;
 }
 .product-form__submit span {
   font-family: Avenir;
@@ -230,7 +231,7 @@ product-info {
 /* Product info */
 
 .product__info-container > * + * {
-  margin: 1.5rem 0;
+  margin: 0 0 24px 0;
 }
 
 .product__info-container iframe {
@@ -261,7 +262,7 @@ a.product__text {
 
 .product__title {
   word-break: break-word;
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .product__title > * {
@@ -291,27 +292,25 @@ a.product__text {
 }
 
 .product .price .badge {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .product .price__container {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .product .price dl {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .product .price--sold-out .price__badge-sale {
   display: none;
 }
-
+.product__info-container > *:first-child {
+  margin-bottom: 12px;
+}
 @media screen and (min-width: 750px) {
-  .product__info-container {
-    max-width: 60rem;
-  }
-
   .product__info-container .price--on-sale .price-item--regular {
     font-size: 1.6rem;
   }
@@ -378,6 +377,41 @@ a.product__text {
 
 .price-per-item__label.form__label {
   margin-bottom: 0rem;
+}
+
+.key-benefits {
+  margin: 0 !important;
+}
+
+.key-benefits__title,
+.key-benefits__text {
+  font-family: Avenir;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0;
+  color: #000000;
+}
+
+.key-benefits__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.key-benefits__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.key-benefits__icon {
+  display: inline-flex;
+  flex: 0 0 24px;
 }
 
 .subscription-block {
@@ -456,6 +490,67 @@ a.product__text {
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+}
+
+.why-subscribe {
+  padding: 12px;
+  background-color: #e9ebd8;
+  margin-top: 8px;
+}
+
+.why-subscribe__title {
+  margin: 0 0 8px 0;
+  font-family: Avenir;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: #000000;
+}
+
+.why-subscribe__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.why-subscribe__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.why-subscribe__icon {
+  display: inline-flex;
+  flex: 0 0 24px;
+}
+
+.why-subscribe__text {
+  font-family: Avenir;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: #18181b;
+}
+
+.product-seals {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.product-seals__image {
+  height: auto;
+  max-height: 48px;
+  width: auto;
 }
 
 .price-per-item__container {
@@ -798,6 +893,19 @@ a.product__text {
 
   .product__media-list .deferred-media {
     display: block;
+  }
+}
+@media screen and (max-width: 989px) {
+  .key-benefits__list {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .subscription-block__options {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .price-per-item__container {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 }
 

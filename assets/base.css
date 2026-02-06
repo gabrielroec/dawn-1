@@ -2485,6 +2485,9 @@ input[type='checkbox'] {
   .header--mobile-left {
     grid-template-columns: auto 2fr 1fr;
   }
+  .scroll-trigger:not(.scroll-trigger--offscreen).animate--slide-in {
+    padding: 0;
+  }
 }
 
 @media screen and (min-width: 990px) {

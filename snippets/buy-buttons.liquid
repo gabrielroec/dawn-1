@@ -120,6 +120,16 @@
         </div>
       {%- endform -%}
     </product-form>
+    {%- assign seals = product.metafields.custom.seals.value -%}
+    {%- if seals != blank -%}
+      <div class="product-seals" aria-label="Product seals">
+        {%- for seal in seals -%}
+          {%- if seal != blank -%}
+            {{ seal | image_url: width: 160 | image_tag: class: 'product-seals__image', loading: 'lazy' }}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
   {%- else -%}
     <div class="product-form">
       <div class="product-form__buttons form">
