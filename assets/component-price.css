@@ -21,6 +21,12 @@
 .price .price-item {
   display: inline-block;
   margin: 0 1rem 0 0;
+  font-family: Tenor Sans;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: 0px;
+  text-transform: uppercase;
 }
 
 .price__regular .price-item--regular {

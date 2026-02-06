@@ -310,8 +310,8 @@ quick-add-modal .product__column-sticky {
 
 @media screen and (min-width: 750px) {
   quick-add-modal .product:not(.product--no-media) .product__media-wrapper {
-    max-width: 45%;
-    width: calc(45% - var(--grid-desktop-horizontal-spacing) / 2);
+    max-width: 50%;
+    width: calc(50% - var(--grid-desktop-horizontal-spacing) / 2);
   }
 
   quick-add-modal .product:not(.product--no-media) .product__info-wrapper {

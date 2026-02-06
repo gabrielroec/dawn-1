@@ -287,7 +287,6 @@ function debounce(fn, wait) {
   };
 }
 
-
 function throttle(fn, delay) {
   let lastCall = 0;
   return function (...args) {
@@ -745,6 +744,66 @@ class SliderComponent extends HTMLElement {
     this.slider.addEventListener('scroll', this.update.bind(this));
     this.prevButton.addEventListener('click', this.onButtonClick.bind(this));
     this.nextButton.addEventListener('click', this.onButtonClick.bind(this));
+
+    this.enableDrag();
+  }
+
+  enableDrag() {
+    if (!this.slider || !this.slider.classList.contains('is-draggable')) return;
+
+    this.isPointerDown = false;
+    this.isDragging = false;
+    this.hasDragged = false;
+    const dragThreshold = 8;
+    let startX = 0;
+    let startScrollLeft = 0;
+
+    const onPointerDown = (event) => {
+      if (event.pointerType !== 'mouse' || event.button !== 0) return;
+      this.isPointerDown = true;
+      this.isDragging = false;
+      this.hasDragged = false;
+      startX = event.clientX;
+      startScrollLeft = this.slider.scrollLeft;
+    };
+
+    const onPointerMove = (event) => {
+      if (!this.isPointerDown || event.pointerType !== 'mouse' || event.buttons !== 1) return;
+      const distance = startX - event.clientX;
+      if (!this.isDragging && Math.abs(distance) >= dragThreshold) {
+        this.isDragging = true;
+        this.hasDragged = true;
+        this.slider.classList.add('is-dragging');
+      }
+
+      if (!this.isDragging) return;
+      this.slider.scrollLeft = startScrollLeft + distance;
+    };
+
+    const onPointerUp = (event) => {
+      this.isPointerDown = false;
+      if (this.isDragging) {
+        this.isDragging = false;
+        this.slider.classList.remove('is-dragging');
+      }
+    };
+
+    this.slider.addEventListener('pointerdown', onPointerDown);
+    this.slider.addEventListener('pointermove', onPointerMove);
+    this.slider.addEventListener('pointerup', onPointerUp);
+    this.slider.addEventListener('pointercancel', onPointerUp);
+    this.slider.addEventListener('pointerleave', onPointerUp);
+    this.slider.addEventListener('dragstart', (event) => event.preventDefault());
+    this.slider.addEventListener(
+      'click',
+      (event) => {
+        if (!this.hasDragged) return;
+        event.preventDefault();
+        event.stopPropagation();
+        this.hasDragged = false;
+      },
+      true
+    );
   }
 
   initPages() {
@@ -1282,51 +1341,39 @@ if (!customElements.get('bulk-add')) {
 }
 
 class CartPerformance {
-  static #metric_prefix = "cart-performance"
+  static #metric_prefix = 'cart-performance';
 
   static createStartingMarker(benchmarkName) {
-    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`
+    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`;
     return performance.mark(`${metricName}:start`);
   }
 
   static measureFromEvent(benchmarkName, event) {
-    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`
+    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`;
     const startMarker = performance.mark(`${metricName}:start`, {
-      startTime: event.timeStamp
+      startTime: event.timeStamp,
     });
 
     const endMarker = performance.mark(`${metricName}:end`);
 
-    performance.measure(
-      metricName,
-      `${metricName}:start`,
-      `${metricName}:end`
-    );
+    performance.measure(metricName, `${metricName}:start`, `${metricName}:end`);
   }
 
   static measureFromMarker(benchmarkName, startMarker) {
-    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`
+    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`;
     const endMarker = performance.mark(`${metricName}:end`);
 
-    performance.measure(
-      metricName,
-      startMarker.name,
-      `${metricName}:end`
-    );
+    performance.measure(metricName, startMarker.name, `${metricName}:end`);
   }
 
   static measure(benchmarkName, callback) {
-    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`
+    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`;
     const startMarker = performance.mark(`${metricName}:start`);
 
     callback();
 
     const endMarker = performance.mark(`${metricName}:end`);
 
-    performance.measure(
-      metricName,
-      `${metricName}:start`,
-      `${metricName}:end`
-    );
+    performance.measure(metricName, `${metricName}:start`, `${metricName}:end`);
   }
 }
