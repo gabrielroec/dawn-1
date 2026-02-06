@@ -389,7 +389,7 @@ blockquote {
   font-style: Heavy;
   font-size: 16px;
   line-height: 100%;
-  letter-spacing: 6%;
+  letter-spacing: 4px;
   text-transform: uppercase;
   color: #658536;
 }

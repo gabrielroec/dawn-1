@@ -174,7 +174,7 @@ product-info {
   flex: 0 0 100%;
   padding: 0;
   margin: 0 0 1.2rem 0;
-  max-width: 44rem;
+  max-width: 100%;
   min-width: fit-content;
   border: none;
 }
@@ -189,6 +189,20 @@ product-info {
 
 .product-form__submit {
   margin-bottom: 1rem;
+  background-color: #435219;
+  gap: 8px;
+}
+.product-form__submit span {
+  font-family: Avenir;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 100%;
+  text-transform: uppercase;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .product-form__submit[aria-disabled='true'] + .shopify-payment-button .shopify-payment-button__button[disabled],
@@ -364,6 +378,79 @@ a.product__text {
 
 .price-per-item__label.form__label {
   margin-bottom: 0rem;
+}
+
+.subscription-block {
+  margin-top: 1.6rem;
+  font-family: Avenir;
+}
+
+.subscription-block__options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.subscription-block__option {
+  border: 1px solid #cfcfcf;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.subscription-block__option:has(input:checked) {
+  background-color: #c7d39c;
+  color: #000000;
+  border-color: #435219;
+}
+
+.subscription-block__option input {
+  width: 24px;
+  height: 24px;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-size: 24px 24px;
+  margin: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0.375' y='0.375' width='23.25' height='23.25' rx='11.625' stroke='black' stroke-width='0.75'/%3E%3C/svg%3E");
+}
+
+.subscription-block__option input:checked {
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0.375' y='0.375' width='23.25' height='23.25' rx='11.625' stroke='black' stroke-width='0.75'/%3E%3Ccircle cx='12' cy='12' r='7.5' fill='black'/%3E%3C/svg%3E");
+}
+
+.subscription-block__option-label {
+  font-family: Avenir;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: #000;
+}
+
+.subscription-block__select {
+  margin-top: 4px;
+  position: relative;
+}
+
+.subscription-block__select select {
+  width: 100%;
+  border: 1px solid #cfcfcf;
+  padding: 0.9rem 3rem 0.9rem 1.2rem;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 400;
+  appearance: none;
+  background: #fff;
+}
+
+.subscription-block__select-icon {
+  position: absolute;
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .price-per-item__container {

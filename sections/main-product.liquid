@@ -531,6 +531,25 @@
 
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+                <div class="subscription-block" aria-label="Frequency">
+                  <p class="subscription-block__title">Frequency</p>
+                  <div class="subscription-block__options" role="group" aria-label="Purchase options">
+                    <label class="subscription-block__option">
+                      <input type="radio" name="purchase_option" checked>
+                      <span class="subscription-block__option-label">Subscribe &amp; save an extra 15%</span>
+                    </label>
+                    <label class="subscription-block__option">
+                      <input type="radio" name="purchase_option">
+                      <span class="subscription-block__option-label">One-time purchase</span>
+                    </label>
+                  </div>
+                  <div class="subscription-block__select">
+                    <select aria-label="Delivery frequency">
+                      <option selected>Deliver every 1 month</option>
+                    </select>
+                    <span class="subscription-block__select-icon" aria-hidden="true">▾</span>
+                  </div>
+                </div>
               {%- when 'buy_buttons' -%}
                 {%- render 'buy-buttons',
                   block: block,

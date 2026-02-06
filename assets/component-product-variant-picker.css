@@ -1,13 +1,17 @@
 variant-selects {
   display: block;
 }
-variant-selects .form__label {
+variant-selects .form__label,
+.subscription-block__title {
   padding-left: 0;
   font-family: Avenir;
   font-weight: 800;
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0px;
+}
+p.subscription-block__title {
+  margin: 24px 0 8px 0;
 }
 .product--no-media .product-form__input--pill,
 .product--no-media .product-form__input--swatch,
@@ -17,7 +21,11 @@ variant-selects .form__label {
   justify-content: center;
   text-align: center;
 }
-
+.variant-picker-options {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 .product--no-media .product-form__input.product-form__input--pill,
 .product--no-media .product-form__input.product-form__input--swatch {
   flex-wrap: wrap;
@@ -30,7 +38,7 @@ variant-selects .form__label {
 }
 
 :is(.product-form__input--pill, .product-form__input--swatch) .form__label {
-  margin-bottom: 0.2rem;
+  margin-bottom: 8px;
 }
 
 .product-form__input input[type='radio'] {
@@ -71,7 +79,7 @@ variant-selects .form__label {
   border-radius: 0px;
   color: rgb(var(--color-foreground));
   display: inline-block;
-  margin: 0.7rem 0.5rem 0.2rem 0;
+  margin: 0;
   padding: 1rem 2rem;
   font-size: 1.4rem;
   letter-spacing: 0.1rem;
@@ -86,6 +94,7 @@ variant-selects .form__label {
   font-size: 16px;
   line-height: 20px;
   letter-spacing: 0px;
+  width: 100%;
 }
 
 .variant-sticks-count {
@@ -117,6 +126,7 @@ variant-selects .form__label {
 .product-form__input--pill input[type='radio']:checked + label {
   background-color: #c7d39c;
   color: #000000;
+  border-color: #435219;
 }
 
 @media screen and (forced-colors: active) {

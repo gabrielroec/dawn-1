@@ -49,8 +49,11 @@ if (!customElements.get('product-info')) {
       initBundlePricingHandlers() {
         if (!this.quantityInput) return;
         this.updateBundlePricingTotals();
+        this.updateAtcPriceTotals();
         this.quantityInput.addEventListener('input', () => this.updateBundlePricingTotals());
         this.quantityInput.addEventListener('change', () => this.updateBundlePricingTotals());
+        this.quantityInput.addEventListener('input', () => this.updateAtcPriceTotals());
+        this.quantityInput.addEventListener('change', () => this.updateAtcPriceTotals());
       }
 
       disconnectedCallback() {
@@ -200,10 +203,12 @@ if (!customElements.get('product-info')) {
           updateSourceFromDestination('Volume');
           updateSourceFromDestination('Price-Per-Item', ({ classList }) => classList.contains('hidden'));
           updateSourceFromDestination('Bundle-Pricing', ({ classList }) => classList.contains('hidden'));
+          updateSourceFromDestination('ATC-Price');
 
           this.updateQuantityRules(this.sectionId, html);
           this.syncBundlePricingData(html);
           this.updateBundlePricingTotals();
+          this.updateAtcPriceTotals();
           this.querySelector(`#Quantity-Rules-${this.dataset.section}`)?.classList.remove('hidden');
           this.querySelector(`#Volume-Note-${this.dataset.section}`)?.classList.remove('hidden');
 
@@ -247,10 +252,7 @@ if (!customElements.get('product-info')) {
 
         if (!basePrice || !sticksCount) return;
 
-        const formatMoney = (cents) => {
-          if (!currency) return `${cents / 100}`;
-          return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(cents / 100);
-        };
+        const formatMoney = (cents) => this.formatMoney(cents, currency, locale);
 
         const totalPrice = basePrice * qty;
         const totalCompare = baseCompare ? baseCompare * qty : 0;
@@ -269,6 +271,29 @@ if (!customElements.get('product-info')) {
           compareWrapper.classList.toggle('hidden', !hasCompare);
           if (hasCompare && compareEl) compareEl.textContent = formatMoney(totalCompare);
         }
+      }
+
+      updateAtcPriceTotals() {
+        const container = this.querySelector(`#ATC-Price-${this.dataset.section}`);
+        if (!container) return;
+
+        const priceEl = container.querySelector('[data-atc-price]');
+        if (!priceEl) return;
+
+        const qty = parseInt(this.quantityInput?.value || '1', 10);
+        const basePrice = parseInt(priceEl.dataset.price || '0', 10);
+        const currency = priceEl.dataset.currency;
+        const locale = priceEl.dataset.locale || document.documentElement.lang || 'en';
+
+        if (!basePrice) return;
+
+        const totalPrice = basePrice * qty;
+        priceEl.textContent = this.formatMoney(totalPrice, currency, locale);
+      }
+
+      formatMoney(cents, currency, locale) {
+        if (!currency) return `${cents / 100}`;
+        return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(cents / 100);
       }
 
       updateVariantInputs(variantId) {
