@@ -59,10 +59,25 @@
   {%- endcapture -%}
 
   {% assign escaped_value = value | escape %}
+  {%- liquid
+    assign sticks_label = ''
+    assign sticks_per_pack = product.metafields.custom.sticks_per_pack.value
+    assign value_downcase = value | downcase
+
+    if sticks_per_pack and value_downcase contains 'pack'
+      assign packs_text = value | split: ' ' | first
+      assign packs_count = packs_text | plus: 0
+
+      if packs_count > 0
+        assign sticks_count = packs_count | times: sticks_per_pack
+        assign sticks_label = ' (<span class="variant-sticks-count">' | append: sticks_count | append: ' sticks</span>)'
+      endif
+    endif
+  -%}
 
   {%- if picker_type == 'swatch' -%}
     {%- capture help_text -%}
-      <span class="visually-hidden">{{ escaped_value }}</span>
+      <span class="visually-hidden">{{ escaped_value }}{{ sticks_label }}</span>
       {{ label_unavailable }}
     {%- endcapture -%}
 
@@ -95,7 +110,7 @@
       {{ input_dataset }}
     >
     <label for="{{ input_id }}">
-      {{ value -}}
+      {{ value -}}{{ sticks_label }}
       {{ label_unavailable }}
     </label>
   {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}
@@ -114,9 +129,9 @@
       {{ input_dataset }}
     >
       {% if option_disabled -%}
-        {{- 'products.product.value_unavailable' | t: option_value: value -}}
+        {{- 'products.product.value_unavailable' | t: option_value: value | append: sticks_label -}}
       {%- else -%}
-        {{- value -}}
+        {{- value -}}{{ sticks_label }}
       {%- endif %}
     </option>
   {%- endif -%}

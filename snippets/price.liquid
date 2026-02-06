@@ -35,6 +35,23 @@
     assign money_price_max = price_max | money_with_currency
   endif
 
+  assign weight_oz = nil
+  if product and request.page_type == 'product' and use_variant
+    assign variant_for_oz = target
+    assign oz_per_stick = product.metafields.custom.oz_per_stick.value
+    assign sticks_per_pack = product.metafields.custom.sticks_per_pack.value
+
+    if variant_for_oz and oz_per_stick and sticks_per_pack
+      assign packs_text = variant_for_oz.title | split: ' ' | first
+      assign packs_count = packs_text | plus: 0
+
+      if packs_count > 0
+        assign sticks_count = packs_count | times: sticks_per_pack
+        assign weight_oz = sticks_count | times: oz_per_stick
+      endif
+    endif
+  endif
+
   if target == product and product.price_varies
     assign money_price = 'products.product.price.from_price_html' | t: price: money_price
   endif
@@ -90,6 +107,9 @@
           <span class="price-item price-item--regular">
             {{ money_price }}
           </span>
+          {%- if weight_oz -%}
+            <span class="price-item price-item--oz"> – {{ weight_oz | round: 2 | remove: '.0' }} OZ</span>
+          {%- endif -%}
         {%- endif -%}
       </div>
       <div class="price__sale">
@@ -111,12 +131,15 @@
         <span class="price-item price-item--sale price-item--last">
           {{ money_price }}
         </span>
+        {%- if weight_oz -%}
+          <span class="price-item price-item--oz"> – {{ weight_oz | round: 2 | remove: '.0' }} OZ</span>
+        {%- endif -%}
       </div>
       {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
         {% render 'unit-price', price: product.selected_or_first_available_variant.unit_price, measurement: product.selected_or_first_available_variant.unit_price_measurement %}
       {%- endif -%}
     </div>
-    {%- if show_badges -%}
+    {% comment %} {%- if show_badges -%}
       <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
         {{ 'products.product.on_sale' | t }}
       </span>
@@ -124,6 +147,6 @@
       <span class="badge price__badge-sold-out color-{{ settings.sold_out_badge_color_scheme }}">
         {{ 'products.product.sold_out' | t }}
       </span>
-    {%- endif -%}
+    {%- endif -%} {% endcomment %}
   </div>
 {% endunless %}
