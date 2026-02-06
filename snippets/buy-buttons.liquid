@@ -130,6 +130,26 @@
         {%- endfor -%}
       </div>
     {%- endif -%}
+    {%- assign dropdown_items = product.metafields.custom.dropdown.value -%}
+    {%- if dropdown_items != blank -%}
+      <div class="product-dropdowns" aria-label="Product details">
+        {%- for item in dropdown_items -%}
+          {%- assign item_title = item.title -%}
+          {%- assign item_content = item.content -%}
+          {%- if item_title != blank or item_content != blank -%}
+            <details class="product-dropdown">
+              <summary class="product-dropdown__summary">
+                <span class="product-dropdown__title">{{ item_title }}</span>
+                <span class="product-dropdown__icon" aria-hidden="true"></span>
+              </summary>
+              <div class="product-dropdown__content rte">
+                {{ item_content | metafield_tag }}
+              </div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
   {%- else -%}
     <div class="product-form">
       <div class="product-form__buttons form">

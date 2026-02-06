@@ -1,5 +1,5 @@
 @import url('https://fonts.cdnfonts.com/css/avenir');
-
+@import url('https://fonts.cdnfonts.com/css/inter');
 :root {
   --alpha-button-background: 1;
   --alpha-button-border: 1;
@@ -1886,7 +1886,7 @@ input[type='checkbox'] {
 .quantity {
   color: rgba(var(--color-foreground));
   position: relative;
-  width: calc(14rem / var(--font-body-scale) + var(--inputs-border-width) * 2);
+  width: 104px;
   display: flex;
   border-radius: var(--inputs-radius);
   min-height: calc((var(--inputs-border-width) * 2) + 4.5rem);
@@ -1923,21 +1923,20 @@ input[type='checkbox'] {
 }
 
 .quantity__input {
-  color: currentColor;
-  font-family: var(--font-body-family);
-  font-style: var(--font-body-style);
-  font-weight: var(--font-body-weight);
-  font-size: 1.6rem;
-  font-weight: 500;
-  opacity: 0.85;
-  text-align: center;
-  background-color: transparent;
-  border: 0;
-  padding: 0 0.5rem;
+  font-family: Avenir;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 100%;
+  text-transform: uppercase;
+  border: none;
+  padding: 0;
   width: 100%;
   flex-grow: 1;
-  -webkit-appearance: none;
-  appearance: none;
+}
+button.quantity__button {
+  font-family: Avenir;
+  font-weight: 800;
+  font-size: 18px;
 }
 
 .quantity__button {

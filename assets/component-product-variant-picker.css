@@ -9,6 +9,7 @@ variant-selects .form__label,
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0px;
+  color: #000;
 }
 p.subscription-block__title {
   margin: 24px 0 8px 0;
@@ -183,6 +184,12 @@ p.subscription-block__title {
 @media screen and (min-width: 750px) {
   .product-form__input--swatch .swatch-input__input + .swatch-input__label {
     --swatch-input--size: 2.8rem;
+  }
+}
+@media screen and (max-width: 749px) {
+  .product-form__input--pill input[type='radio'] + label,
+  .variant-sticks-count {
+    font-size: 14px;
   }
 }
 /* End custom styles for Swatch display type */
