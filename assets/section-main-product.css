@@ -392,7 +392,7 @@ a.product__text {
 }
 
 .subscription-block__option {
-  border: 1px solid #cfcfcf;
+  border: 1px solid #878787;
   padding: 12px;
   display: flex;
   align-items: center;
@@ -436,13 +436,18 @@ a.product__text {
 
 .subscription-block__select select {
   width: 100%;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #878787;
   padding: 0.9rem 3rem 0.9rem 1.2rem;
   font-size: 16px;
   line-height: 20px;
   font-weight: 400;
   appearance: none;
   background: #fff;
+
+  font-family: Avenir;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
 }
 
 .subscription-block__select-icon {
